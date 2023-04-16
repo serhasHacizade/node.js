@@ -1,15 +1,26 @@
 const express = require("express");
 const app = express();
 
+app.set("view engine", "ejs");
+app.use(express.static("public"));
+
+
+const data = [
+    {id : 1, name : "iphone 14", price : 3000, imageUrl : "../public/images/1.jpg"},
+    {id : 2, name : "Samsung s22", price : 2000, imageUrl : "../public/images/2.jpg"},
+    {id : 3, name : "iphone 11", price : 1000, imageUrl : "../public/images/3.jpg"}
+];
+
 app.use("/products/:id", (req, res) => {
-    res.send("Products Details " + req.params.id);
+    const item = data.find(p => p.id == req.params.id);
+    res.render("productDetail", item);
+});
+app.use("/products", (req, res) => {
+    res.render("products", {data : data});
 });
 
-app.use("/products", (req, res) => {
-	res.send("Products");
-});
 app.use("/", (req, res) => {
-	res.send("Main page");
+	res.render("index");
 });
 
 
